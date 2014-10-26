@@ -20,9 +20,10 @@ class HerokuTest < Sinatra::Base
   get("/unix_sort") do
     mem_start = mem_usage
     time = Benchmark.measure { puts `sort -g --field-separator=',' --key=2,1 fielding.csv > sorted.csv` }.real
-    f = File.open("sorted.csv")
-    mem_end = mem_usage
-    results(time, mem_end - mem_start, f.readline)
+    File.open("sorted.csv") do |f|
+      mem_end = mem_usage
+      results(time, mem_end - mem_start, f.readline)
+    end
   end
 
   get("/ruby_sort") do
